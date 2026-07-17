@@ -1,0 +1,134 @@
+apiVersion: "v1.0.0"
+kind: "DataProduct"
+id: "customers"
+name: "Customers"
+status: "active"
+domain: "web-shop"
+description:
+  purpose: |
+    The **Customers** data product includes both *registered users* and *guest buyers* from the online shop.
+
+    It contains all customer records collected since the launch of the platform, offering:
+    - **PII and non-PII** versions
+    - **Latest state** and **full historical** datasets
+
+    This product supports downstream analytics, customer segmentation, and personalization initiatives.
+team:
+  name: "sales-team"
+tags:
+- "certification/gold"
+outputPorts:
+- name: "databricks_customers_latest_npii_v1"
+  version: "1"
+  description: "All customers in their latest state, PII removed."
+  type: "databricks"
+  contractId: "databricks_customers_latest_npii_v1"
+  customProperties:
+  - property: "displayName"
+    value: "Customers Latest (No PII) Databricks v1"
+  - property: "platformRole"
+    value: "op_customers_databricks_customers_latest_npii_v1_role"
+  - property: "status"
+    value: "active"
+  - property: "autoApprove"
+    value: false
+  - property: "containsPii"
+    value: false
+  - property: "contractServer"
+    value: "databricks"
+- name: "databricks_customers_latest_pii_v2"
+  version: "1"
+  description: "All customers in their latest state, PII included."
+  type: "databricks"
+  customProperties:
+  - property: "displayName"
+    value: "Customers Latest (PII) Databricks THIS IS IT"
+  - property: "status"
+    value: "active"
+  - property: "autoApprove"
+    value: false
+  - property: "containsPii"
+    value: true
+  - property: "platformRole"
+    value: "op_customers_databricks_customers_latest_pii_v1_role"
+- name: "s3_customers_history_npii_v1"
+  version: "1"
+  description: "All customer states, updated on every modifying event. PII removed."
+  type: "s3"
+  contractId: "s3_customers_history_npii_v1"
+  customProperties:
+  - property: "displayName"
+    value: "Customers History (No PII) S3 v1"
+  - property: "platformRole"
+    value: "op_customers_s3_customers_history_npii_v1_role"
+  - property: "status"
+    value: "active"
+  - property: "autoApprove"
+    value: false
+  - property: "containsPii"
+    value: false
+  - property: "server"
+    value:
+      location: "s3://acme-customers-history-npii-v1/output/data/"
+- name: "s3_customers_history_pii_v1"
+  version: "1"
+  description: "All customer states, updated on every modifying event. PII included."
+  type: "s3"
+  contractId: "s3_customers_history_pii_v1"
+  customProperties:
+  - property: "displayName"
+    value: "Customers History (PII) S3 v1"
+  - property: "platformRole"
+    value: "op_customers_s3_customers_history_pii_v1_role"
+  - property: "status"
+    value: "active"
+  - property: "autoApprove"
+    value: false
+  - property: "containsPii"
+    value: true
+  - property: "server"
+    value:
+      location: "s3://acme-customers-history-pii-v1/output/data/"
+- name: "databricks_customers_latest_npii_v1-3"
+  version: "1"
+  contractId: "databricks_customers_latest_npii_v1"
+  customProperties:
+  - property: "displayName"
+    value: "Customers Latest NPII"
+  - property: "autoApprove"
+    value: false
+  - property: "containsPii"
+    value: false
+support:
+- channel: "data-product-customers@acme.example.com"
+  url: "mailto:data-product-customers@acme.example.com"
+  description: "Email the Sales team for questions about customer data, PII access, or data quality issues."
+  tool: "email"
+  scope: "interactive"
+authoritativeDefinitions:
+- type: "semantics"
+  url: "http://localhost:8080/demo364684062056/semantics/main/customer"
+- type: "repository"
+  url: "https://gitlab.acme.example.com/sales/data-product-customers"
+customProperties:
+- property: "icon"
+  value: "databricks"
+- property: "type"
+  value: "source-aligned"
+- property: "platformRole"
+  value: "dp_customers_role"
+- property: "riskAssessment"
+  value: "high risk"
+- property: "dataResidency"
+  value: "EU"
+- property: "keywords"
+  value: "customer master, buyer, user profiles, PII, personal data, contact information, CRM, segmentation, personalization, guest buyers"
+- property: "aiInstructions"
+  value: "Use the non-PII output port (databricks_customers_latest_npii_v1) unless the user explicitly needs personal data such as name, email, or address. The CUSTOMERS table has one row per customer, deduplicated on customer_id. For historical analysis, use the S3 history ports instead. The Databricks ports use the catalog sales_customers_demo."
+- property: "aiExamples"
+  value: |-
+    Q: How many active customers do we have?
+    SELECT COUNT(*) AS active_customers FROM sales_customers_demo.dp_customers_op_latest_npii_v1.customers WHERE status = 'active';
+
+    Q: What is the distribution of customers by country?
+    SELECT country, COUNT(*) AS customer_count FROM sales_customers_demo.dp_customers_op_latest_npii_v1.customers GROUP BY country ORDER BY customer_count DESC;
