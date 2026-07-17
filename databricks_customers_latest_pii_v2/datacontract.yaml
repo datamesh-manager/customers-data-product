@@ -1,0 +1,67 @@
+dataContractSpecification: 1.1.0
+id: databricks_customers_latest_pii_v2
+info:
+  title: Customers Latest (PII) Databricks
+  version: 2.0.0
+  description: All customers in their latest state, PII included. Access is restricted to use cases with an approved legal basis.
+  status: active
+  owner: sales-team
+  contact:
+    name: Sales Team
+    email: data-product-customers@acme.example.com
+terms:
+  usage: Customer support, billing, and fraud prevention with an approved legal basis
+  limitations: Contains PII. GDPR applies; access requests require a documented purpose.
+  noticePeriod: P3M
+servers:
+  production:
+    type: databricks
+    catalog: acme_prod
+    schema: customers_latest_pii
+models:
+  customers:
+    type: table
+    description: Table containing all customers in their latest state including PII.
+    title: Customers
+    fields:
+      CUSTOMER_ID:
+        type: text
+        description: Unique identifier of the customer
+        title: Customer ID
+        required: true
+        unique: true
+      FIRST_NAME:
+        type: text
+        description: First name of the customer
+        title: First Name
+        pii: true
+      LAST_NAME:
+        type: text
+        description: Last name of the customer
+        title: Last Name
+        pii: true
+      EMAIL:
+        type: text
+        description: Email address of the customer
+        title: Email
+        pii: true
+        classification: sensitive
+      PHONE_NUMBER:
+        type: text
+        description: Phone number of the customer
+        title: Phone Number
+        pii: true
+        classification: sensitive
+      COUNTRY_CODE:
+        type: text
+        description: ISO 3166-1 alpha-2 country code of the customer
+        title: Country Code
+      SIGNUP_DATE:
+        type: date
+        description: Date the customer registered on the platform
+        title: Signup Date
+      IS_ACTIVE:
+        type: boolean
+        description: Whether the customer account is active
+        title: Is Active
+        required: true

@@ -1,0 +1,65 @@
+dataContractSpecification: 1.1.0
+id: databricks_customers_latest_npii_v1
+info:
+  title: Customers Latest (No PII) Databricks
+  version: 1.0.0
+  description: All customers in their latest state, PII removed. Contains anonymized demographics, segmentation, and account metadata for active and inactive customers.
+  status: active
+  owner: sales-team
+  contact:
+    name: Sales Team
+    email: data-product-customers@acme.example.com
+terms:
+  usage: Analytics, customer segmentation, and personalization initiatives
+  limitations: Not suitable for use cases that require PII
+  noticePeriod: P3M
+servers:
+  production:
+    type: databricks
+    catalog: acme_prod
+    schema: customers_latest_npii
+models:
+  customers:
+    type: table
+    description: Table containing all customers in their latest state with PII removed.
+    title: Customers
+    fields:
+      CUSTOMER_ID:
+        type: text
+        description: Unique identifier of the customer
+        title: Customer ID
+        required: true
+        unique: true
+      CUSTOMER_TYPE:
+        type: text
+        description: Whether the customer is a registered user or a guest buyer
+        title: Customer Type
+        enum:
+          - registered
+          - guest
+        required: true
+      SEGMENT:
+        type: text
+        description: Customer segment used for marketing campaigns
+        title: Segment
+      COUNTRY_CODE:
+        type: text
+        description: ISO 3166-1 alpha-2 country code of the customer
+        title: Country Code
+      SIGNUP_DATE:
+        type: date
+        description: Date the customer registered on the platform
+        title: Signup Date
+      LAST_ORDER_DATE:
+        type: date
+        description: Date of the customer's most recent order
+        title: Last Order Date
+      LIFETIME_ORDER_COUNT:
+        type: integer
+        description: Total number of orders placed by the customer
+        title: Lifetime Order Count
+      IS_ACTIVE:
+        type: boolean
+        description: Whether the customer account is active
+        title: Is Active
+        required: true
